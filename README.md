@@ -6,6 +6,7 @@ Wrapper arounds letsencrypt.sh and route53.rb to create and upload ssl certs to 
 ```
 export AWS_ACCESS_KEY_ID="..."
 export AWS_SECRET_ACCESS_KEY="..."
+export CONTACT_EMAIL="..."
 
 ./cert-issuer.sh -d domain.com -d sub.domain.com
 ```
