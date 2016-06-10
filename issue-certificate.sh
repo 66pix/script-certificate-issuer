@@ -24,13 +24,17 @@ fi
 # Create the certificates for the given domains
 ./letsencrypt.sh/letsencrypt.sh -f ./config.sh --cron $@
 
+DATE=`date +%Y-%m-%d`
 # Upload each certifiate to AWS
 for CERTIFICATE_FILE in ./letsencrypt.sh/certs/*
 do
-    CERTIFICATE="${CERTIFICATE_FILE##*/}"
+    CERTIFICATE="${CERTIFICATE_FILE##*/}-$DATE"
+
     aws iam upload-server-certificate \
         --server-certificate-name $CERTIFICATE \
         --certificate-body file://$CERTIFICATE_FILE/cert.pem \
         --private-key file://$CERTIFICATE_FILE/privkey.pem \
         --certificate-chain file://$CERTIFICATE_FILE/chain.pem
 done
+
+rm -rf letsencrypt.sh
