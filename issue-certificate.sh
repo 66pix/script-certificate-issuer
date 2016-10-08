@@ -11,7 +11,7 @@ if [ -z "$1" ]; then
 fi
 
 # Clone letsencrypt if not present
-[[ -d letsencrypt.sh ]] || git clone https://github.com/lukas2511/letsencrypt.sh.git
+[[ -d letsencrypt.sh ]] || git clone https://github.com/lukas2511/dehydrated.git
 
 # Install aws cli & bundle if not present
 if ! type "aws" > /dev/null; then
@@ -22,11 +22,11 @@ if ! type "bundle" > /dev/null; then
 fi
 
 # Create the certificates for the given domains
-./letsencrypt.sh/letsencrypt.sh -f ./config.sh --cron $@
+./dehydrated/dehydrated -f ./config.sh --cron $@
 
 DATE=`date +%Y-%m-%d`
 # Upload each certifiate to AWS
-for CERTIFICATE_FILE in ./letsencrypt.sh/certs/*
+for CERTIFICATE_FILE in ./dehydrated/certs/*
 do
     CERTIFICATE="${CERTIFICATE_FILE##*/}-$DATE"
 
@@ -37,4 +37,4 @@ do
         --certificate-chain file://$CERTIFICATE_FILE/chain.pem
 done
 
-rm -rf letsencrypt.sh
+rm -rf dehydrated
