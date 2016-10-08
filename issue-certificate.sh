@@ -25,16 +25,17 @@ fi
 ./dehydrated/dehydrated -f ./config.sh --cron $@
 
 DATE=`date +%Y-%m-%d`
-# Upload each certifiate to AWS
+EXPIRATION_DATE=$(date -v +80d)
+
+# Upload each certificate to AWS
 for CERTIFICATE_FILE in ./dehydrated/certs/*
 do
-    CERTIFICATE="${CERTIFICATE_FILE##*/}-$DATE"
-
+    CERTIFICATE="${CERTIFICATE_FILE##*/}-${DATE}_${EXPIRATION_DATE}"
     aws iam upload-server-certificate \
-        --server-certificate-name $CERTIFICATE \
-        --certificate-body file://$CERTIFICATE_FILE/cert.pem \
-        --private-key file://$CERTIFICATE_FILE/privkey.pem \
-        --certificate-chain file://$CERTIFICATE_FILE/chain.pem
+        --server-certificate-name ${CERTIFICATE} \
+        --certificate-body file://${CERTIFICATE_FILE}/cert.pem \
+        --private-key file://${CERTIFICATE_FILE}/privkey.pem \
+        --certificate-chain file://${CERTIFICATE_FILE}/chain.pem
 done
 
 rm -rf dehydrated
