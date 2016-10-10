@@ -25,7 +25,7 @@ fi
 ./dehydrated/dehydrated -f ./config.sh --cron $@
 
 DATE=`date +%Y-%m-%d`
-EXPIRATION_DATE=$(date -v +80d)
+EXPIRATION_DATE=$(date -v +80d +%Y-%m-%d)
 
 # Upload each certificate to AWS
 for CERTIFICATE_FILE in ./dehydrated/certs/*
